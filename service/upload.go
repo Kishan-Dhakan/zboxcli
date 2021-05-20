@@ -23,10 +23,17 @@ func (u *UploadService) UploadStreamToDStorage() error {
 	log.Printf("uploading: from to remote '%s'", u.FileConfig.RemoteFilePath)
 	allocationObj, err := sdk.GetAllocation(u.UploadConfig.AppConfig.AllocationID)
 	if err != nil {
+		log.Println(err)
 		return fmt.Errorf("error fetching the allocation. %s", err.Error())
 	}
 
 	//todo: delete incomplete upload and re-upload
+	if u.FileConfig.Incomplete {
+		err = deleteIncompleteUpload(allocationObj, u.FileConfig.RemoteFilePath)
+		if err != nil {
+			return err
+		}
+	}
 
 	wg := &sync.WaitGroup{}
 	statusBar := &StatusBar{wg: wg}
@@ -70,8 +77,14 @@ func (u *UploadService) UploadStreamToDStorage() error {
 	return nil
 }
 
-func deleteIncompleteUpload(allocationObj *sdk.Allocation) {
+func deleteIncompleteUpload(allocationObj *sdk.Allocation, filePath string) error {
+	err := allocationObj.DeleteFile(filePath)
+	if err != nil {
+		log.Println("Delete failed:", err.Error())
+		return err
+	}
 
+	return nil
 }
 
 func commitMetaTxn(path, crudOp, authTicket, lookupHash string, a *sdk.Allocation, fileMeta *sdk.ConsolidatedFileMeta, status *StatusBar) error {

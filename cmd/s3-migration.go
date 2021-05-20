@@ -69,7 +69,7 @@ func migrateFromS3(cmd *cobra.Command, args []string) error {
 		log.Println(err)
 	}
 
-	log.Println("migration done")
+	log.Println("migration complete")
 	return nil
 
 }
@@ -85,9 +85,6 @@ func ListS3Buckets(sess *session.Session) ([]string, error) {
 
 	buckets := make([]string, 0)
 	for _, b := range result.Buckets {
-		fmt.Printf("* %s created on %s\n",
-			aws.StringValue(b.Name), aws.TimeValue(b.CreationDate))
-
 		buckets = append(buckets, aws.StringValue(b.Name))
 	}
 
@@ -123,12 +120,8 @@ func MigrateFromS3UsingStream(sess *session.Session, migrationConfig *model.Migr
 				remoteFilePath := fmt.Sprintf("/%s/%s", thisBucket, *item.Key)
 				incomplete := false
 				if fileSize, ok := existingFIleList[remoteFilePath]; ok {
-					log.Println("file already exits in remote")
-					log.Println("dStorage size:", fileSize)
-					log.Println("s3 size:", *item.Size)
-					log.Println("skipping download")
 					if fileSize != *item.Size {
-						log.Println("migration was incomplete for this file")
+						//log.Println("migration was incomplete for this file")
 						incomplete = true
 					} else {
 						continue
@@ -151,9 +144,8 @@ func MigrateFromS3UsingStream(sess *session.Session, migrationConfig *model.Migr
 			return err
 		}
 	}
-	log.Println("waiting for all the uploads to be completed")
+
 	wg.Wait()
-	log.Println("waiting is done. migration completed")
 
 	return nil
 }
@@ -190,7 +182,6 @@ func getExistingFileList(uploadConfig *model.MigrationConfig) (map[string]int64,
 func enQueueFileToBeMigrated(svc *s3.S3, uploadQueueItem *model.UploadQueueItem) {
 	queue := uploadQueueItem.UploadQueue
 	for {
-		log.Println("for file ", uploadQueueItem.FileKey, "upload queue current size", queue.CurrentQueueSize)
 		if queue.MaxQueueSize == 0 || queue.CurrentQueueSize < queue.MaxQueueSize {
 			queue.CurrentQueueSize = queue.CurrentQueueSize + 1
 			queue.WaitGroup.Add(1)
@@ -203,7 +194,6 @@ func enQueueFileToBeMigrated(svc *s3.S3, uploadQueueItem *model.UploadQueueItem)
 			}()
 			break
 		} else {
-			//log.Println("upload queue is full, retrying in a second...")
 			time.Sleep(time.Second)
 		}
 	}

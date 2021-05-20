@@ -18,7 +18,7 @@ func GetMigrationConfig(cmd *cobra.Command) (*model.MigrationConfig, error) {
 			log.Println("bucket list not provided, backing up all buckets in this region:")
 
 		} else {
-			log.Println("buckets from cmd:", buckets)
+			//log.Println("buckets from cmd:", buckets)
 			config.Buckets = buckets
 		}
 	}
