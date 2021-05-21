@@ -111,7 +111,7 @@ func MigrateFromS3UsingStream(sess *session.Session, migrationConfig *model.Migr
 	}
 
 	for _, thisBucket := range migrationConfig.Buckets {
-		err := svc.ListObjectsV2Pages(&s3.ListObjectsV2Input{Bucket: aws.String(thisBucket)}, func(page *s3.ListObjectsV2Output, lastPage bool) bool {
+		err := svc.ListObjectsV2Pages(&s3.ListObjectsV2Input{Bucket: aws.String(thisBucket), Prefix: aws.String(migrationConfig.Prefix)}, func(page *s3.ListObjectsV2Output, lastPage bool) bool {
 			for _, item := range page.Contents {
 				if *item.Size == 0 {
 					continue
@@ -228,7 +228,16 @@ func sendToStorage(svc *s3.S3, uploadQueueItem *model.UploadQueueItem) error {
 		log.Println("upload error:", err)
 		return err
 	}
-	//log.Println(".................success------> ", uploadQueueItem.FileKey)
+
+	if uploadQueueItem.MigrationConfig.DeleteSource {
+		_, err = svc.DeleteObject(&s3.DeleteObjectInput{
+			Bucket: aws.String(uploadQueueItem.Bucket),
+			Key:    aws.String(uploadQueueItem.FileKey),
+		})
+		if err != nil {
+			log.Println(fmt.Sprintf("err removing source file  s3://%s/%s: %v", uploadQueueItem.Bucket, uploadQueueItem.FileKey, err))
+		}
+	}
 
 	return nil
 }

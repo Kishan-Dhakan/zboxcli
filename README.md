@@ -1688,7 +1688,16 @@ Status completed callback. Type = text/plain. Name = 4.txt
  1356 / 1356 [============================================] 100.00% 6s
 Status completed callback. Type = text/plain. Name = 6.txt
 migration done
+```
 
+** migrate files from s3 using prefix, and delete migrated source file
+
+```
+./zbox migrate-s3 --bucket="iamrz1-migration" --region="us-east-2" --prefix x --delete-source --allocation $ALLOC
+starting migration from s3
+ 88 / 88 [==============================================================] 100.00% 1s
+Status completed callback. Type = text/plain. Name = darkc0de.txt
+2021/05/21 12:39:40 s3-migration.go:72: migration complete
 ```
 
 **upload file with encryption**
