@@ -1,7 +1,7 @@
 cloud.google.com/go v0.26.0 h1:e0WKqKTd5BnrG8aKH3J3h+QvEIQtSUcf2n5UZ5ZgLtQ=
 cloud.google.com/go v0.26.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
-github.com/0chain/gosdk v1.2.3-0.20210515122309-aa181c482737 h1:q+IORquHwiF8LUsQyQbsbGMCAq4Rf3AfBmIUnYqd1ig=
-github.com/0chain/gosdk v1.2.3-0.20210515122309-aa181c482737/go.mod h1:L6B7d78lsY+EIPL/9ie88uaF1HwlZzMAulmuLMXP37c=
+github.com/0chain/gosdk v1.2.3-0.20210521074820-19005ed91391 h1:MgHR9ywD0f8TNZGvd+7R3LsfDPltgCogzQEkDL3bbww=
+github.com/0chain/gosdk v1.2.3-0.20210521074820-19005ed91391/go.mod h1:L6B7d78lsY+EIPL/9ie88uaF1HwlZzMAulmuLMXP37c=
 github.com/BurntSushi/toml v0.3.1 h1:WXkYYl6Yr3qBf1K79EBnL4mak0OimBfB0XUf9Vl28OQ=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/OneOfOne/xxhash v1.2.2 h1:KMrpdQIwFcEqXDklaen+P1axHaj9BSKzvpUUfnHldSE=

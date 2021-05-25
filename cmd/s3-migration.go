@@ -186,7 +186,7 @@ func enQueueFileToBeMigrated(svc *s3.S3, uploadQueueItem *model.UploadQueueItem)
 			queue.CurrentQueueSize = queue.CurrentQueueSize + 1
 			queue.WaitGroup.Add(1)
 			go func() {
-				log.Println(uploadQueueItem.ToString())
+				//log.Println(uploadQueueItem.ToString())
 				err := sendToStorage(svc, uploadQueueItem)
 				if err != nil {
 					PrintError("upload to storage failed", err)
